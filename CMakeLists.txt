@@ -32,3 +32,27 @@ target_link_libraries(
     PRIVATE
         gpt2_engine
 )
+
+# ---------------------------------------------------------------------------
+# Testing
+# ---------------------------------------------------------------------------
+
+enable_testing()
+
+find_package(GTest REQUIRED)
+
+add_executable(
+    gpt2_tests
+    tests/config_test.cpp
+)
+
+target_link_libraries(
+    gpt2_tests
+    PRIVATE
+        gpt2_engine
+        GTest::gtest_main
+)
+
+include(GoogleTest)
+
+gtest_discover_tests(gpt2_tests)
