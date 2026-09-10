@@ -18,3 +18,4 @@ TEST(ConfigTest, HeadDimensionIsCalculatedCorrectly) {
 
     EXPECT_EQ(config.head_dim(), 64);
 }
+

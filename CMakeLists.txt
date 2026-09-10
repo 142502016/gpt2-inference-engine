@@ -11,9 +11,14 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
+# ---------------------------------------------------------------------------
+# GPT-2 Engine Library
+# ---------------------------------------------------------------------------
+
 add_library(
     gpt2_engine
     src/model.cpp
+    src/tensor.cpp
 )
 
 target_include_directories(
@@ -21,6 +26,10 @@ target_include_directories(
     PUBLIC
         ${PROJECT_SOURCE_DIR}/include
 )
+
+# ---------------------------------------------------------------------------
+# Generation Application
+# ---------------------------------------------------------------------------
 
 add_executable(
     gpt2_generate
@@ -44,6 +53,7 @@ find_package(GTest REQUIRED)
 add_executable(
     gpt2_tests
     tests/config_test.cpp
+    tests/tensor_test.cpp
 )
 
 target_link_libraries(
