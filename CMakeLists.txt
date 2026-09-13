@@ -19,6 +19,7 @@ add_library(
     gpt2_engine
     src/model.cpp
     src/tensor.cpp
+    src/ops.cpp
 )
 
 target_include_directories(
@@ -39,7 +40,7 @@ add_executable(
 target_link_libraries(
     gpt2_generate
     PRIVATE
-        gpt2_engine
+    gpt2_engine
 )
 
 # ---------------------------------------------------------------------------
@@ -54,6 +55,7 @@ add_executable(
     gpt2_tests
     tests/config_test.cpp
     tests/tensor_test.cpp
+    tests/ops_test.cpp
 )
 
 target_link_libraries(
@@ -61,6 +63,18 @@ target_link_libraries(
     PRIVATE
         gpt2_engine
         GTest::gtest_main
+   
+)
+
+add_executable(
+    gpt2_benchmark
+    apps/benchmark.cpp
+)
+
+target_link_libraries(
+    gpt2_benchmark
+    PRIVATE
+        gpt2_engine
 )
 
 include(GoogleTest)

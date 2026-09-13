@@ -67,3 +67,94 @@ TEST(TensorTest, ConstTensorProvidesReadOnlyData)
 
     EXPECT_EQ(data, tensor.data());
 }
+
+TEST(TensorTest, Supports2DIndexing)
+{
+    gpt2::Tensor tensor({2, 3});
+
+    tensor.at(0, 0) = 1.0f;
+    tensor.at(0, 1) = 2.0f;
+    tensor.at(1, 0) = 4.0f;
+    tensor.at(1, 2) = 6.0f;
+
+    EXPECT_FLOAT_EQ(tensor.at(0, 0), 1.0f);
+    EXPECT_FLOAT_EQ(tensor.at(0, 1), 2.0f);
+    EXPECT_FLOAT_EQ(tensor.at(1, 0), 4.0f);
+    EXPECT_FLOAT_EQ(tensor.at(1, 2), 6.0f);
+}
+
+
+TEST(TensorTest, RejectsOutOfBoundsIndex)
+{
+    gpt2::Tensor tensor({2, 3});
+
+    EXPECT_THROW(
+        tensor.at(2, 0),
+        std::out_of_range
+    );
+
+    EXPECT_THROW(
+        tensor.at(0, 3),
+        std::out_of_range
+    );
+}
+
+TEST(TensorTest, Rejects2DIndexingForNon2DTensor)
+{
+    gpt2::Tensor tensor({2, 3, 4});
+
+    EXPECT_THROW(
+        tensor.at(0, 0),
+        std::invalid_argument
+    );
+}
+
+TEST(TensorTest, Supports3DIndexing)
+{
+    gpt2::Tensor tensor({2, 3, 4});
+
+    tensor.at({0, 0, 0}) = 1.0f;
+    tensor.at({0, 1, 2}) = 12.0f;
+    tensor.at({1, 2, 3}) = 42.0f;
+
+    EXPECT_FLOAT_EQ(tensor.at({0, 0, 0}), 1.0f);
+    EXPECT_FLOAT_EQ(tensor.at({0, 1, 2}), 12.0f);
+    EXPECT_FLOAT_EQ(tensor.at({1, 2, 3}), 42.0f);
+}
+
+TEST(TensorTest, RejectsWrongNumberOfIndices)
+{
+    gpt2::Tensor tensor({2, 3, 4});
+
+    EXPECT_THROW(
+        tensor.at({1, 2}),
+        std::invalid_argument
+    );
+
+    EXPECT_THROW(
+        tensor.at({1, 2, 3, 4}),
+        std::invalid_argument
+    );
+}
+
+TEST(TensorTest, RejectsOutOfBoundsNDIndex)
+{
+    gpt2::Tensor tensor({2, 3, 4});
+
+    EXPECT_THROW(
+        tensor.at({2, 0, 0}),
+        std::out_of_range
+    );
+
+    EXPECT_THROW(
+        tensor.at({0, 3, 0}),
+        std::out_of_range
+    );
+
+    EXPECT_THROW(
+        tensor.at({0, 0, 4}),
+        std::out_of_range
+    );
+}
+
+
